@@ -1,49 +1,44 @@
-import { motion } from "framer-motion";
+import { ScanLine } from "lucide-react";
 import { TooltipIcon } from "./Tooltip";
 import { Button } from "./Button";
 
 export function OCRCard({
   label,
   tooltip,
-  headline,
-  description,
   primaryLabel,
   secondaryLabel,
   onPrimary,
   onSecondary,
+  compact = false,
 }: {
   label: string;
   tooltip: string;
-  headline: string;
-  description: string;
   primaryLabel: string;
   secondaryLabel: string;
   onPrimary: () => void;
   onSecondary: () => void;
+  compact?: boolean;
 }) {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 14 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.28, ease: "easeOut" }}
-      className="rounded-[1.75rem] border border-lavender/80 bg-gradient-to-br from-lavender/50 via-card to-lavender-soft/30 p-5 shadow-card space-y-4"
-    >
+    <div className="space-y-3 rounded-2xl border border-line/60 bg-white p-4 shadow-[0_2px_8px_rgba(23,26,74,0.05)]">
       <div className="flex items-center justify-between gap-2">
-        <span className="text-[10px] font-bold uppercase tracking-wider text-navy/80">{label}</span>
+        <span className="flex items-center gap-2 text-sm font-semibold text-navy">
+          <ScanLine className="h-4 w-4 text-brand-orange" strokeWidth={1.75} aria-hidden />
+          {label}
+        </span>
         <TooltipIcon text={tooltip} />
       </div>
-      <div>
-        <h3 className="text-lg font-bold text-navy leading-snug">{headline}</h3>
-        <p className="mt-1.5 text-sm text-muted leading-relaxed">{description}</p>
-      </div>
+      {!compact ? (
+        <p className="text-sm text-muted leading-relaxed">Zeskanuj dokument, aby uzupełnić pola formularza.</p>
+      ) : null}
       <div className="flex flex-col gap-2">
-        <Button fullWidth onClick={onPrimary}>
+        <Button fullWidth type="button" onClick={onPrimary}>
           {primaryLabel}
         </Button>
         <Button fullWidth variant="secondary" type="button" onClick={onSecondary}>
           {secondaryLabel}
         </Button>
       </div>
-    </motion.div>
+    </div>
   );
 }

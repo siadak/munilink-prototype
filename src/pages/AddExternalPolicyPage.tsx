@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import { motion } from "framer-motion";
 import { Loader2 } from "lucide-react";
 import { AppShell } from "../components/AppShell";
 import { AnimatedPage } from "../components/AnimatedPage";
@@ -8,6 +7,7 @@ import { Input } from "../components/Input";
 import { Select } from "../components/Select";
 import { Button } from "../components/Button";
 import { Badge } from "../components/Badge";
+import { Card } from "../components/Card";
 import { Modal } from "../components/Modal";
 
 const OCR = {
@@ -22,7 +22,7 @@ const OCR = {
 function OcrBadge({ show }: { show: boolean }) {
   if (!show) return null;
   return (
-    <div className="flex justify-end -mb-0.5">
+    <div className="mb-0.5 flex justify-end">
       <Badge tone="success" className="!px-2 !py-0.5 !text-[10px] font-semibold">
         uzupełniono z OCR
       </Badge>
@@ -83,26 +83,19 @@ export function AddExternalPolicyPage() {
 
   return (
     <AppShell showBack>
-      <AnimatedPage className="space-y-5">
-        <h1 className="text-xl font-bold text-navy leading-snug">Dodaj polisę spoza Unilink</h1>
+      <AnimatedPage className="space-y-4">
+        <h1 className="text-lg font-bold text-brand-orange">Dodaj polisę spoza Unilink</h1>
 
         <OCRCard
-          label="SZYBKIE DODAWANIE Z OCR"
-          tooltip="OCR pomaga uzupełnić dane ze zdjęcia dokumentu."
-          headline="Dodaj polisę w kilka sekund"
-          description="Zeskanuj dokument, a uzupełnimy dane automatycznie."
+          label="Skan OCR"
+          tooltip="Zrób zdjęcie polisy — uzupełnimy pola formularza automatycznie."
           primaryLabel="Zrób zdjęcie polisy"
           secondaryLabel="Dodaj ręcznie"
           onPrimary={beginScan}
           onSecondary={clearForManual}
         />
 
-        <motion.section
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.25 }}
-          className="space-y-3"
-        >
+        <Card padding="md" className="space-y-3">
           <p className="text-sm font-bold text-navy">Szczegóły polisy</p>
 
           <div>
@@ -130,7 +123,7 @@ export function AddExternalPolicyPage() {
             <div>
               <OcrBadge show={ocrFilled} />
               <Input
-                label="Początek ubezpieczenia"
+                label="Początek"
                 name="start"
                 value={start}
                 onChange={(e) => setStart(e.target.value)}
@@ -140,7 +133,7 @@ export function AddExternalPolicyPage() {
             <div>
               <OcrBadge show={ocrFilled} />
               <Input
-                label="Koniec ubezpieczenia"
+                label="Koniec"
                 name="end"
                 value={end}
                 onChange={(e) => setEnd(e.target.value)}
@@ -171,13 +164,13 @@ export function AddExternalPolicyPage() {
             />
           </div>
 
-          <button type="button" className="text-sm font-semibold text-brand-orangeDeep py-1">
+          <button type="button" className="text-sm font-semibold text-brand-orange">
             Harmonogram rat
           </button>
 
           <button
             type="button"
-            className="w-full rounded-2xl border border-dashed border-brand-orange/35 bg-lavender/20 px-4 py-6 text-sm font-semibold text-navy"
+            className="w-full rounded-2xl border border-dashed border-line bg-[#fafafa] px-4 py-5 text-sm font-semibold text-navy"
           >
             Dodaj plik (opcjonalnie)
           </button>
@@ -185,7 +178,7 @@ export function AddExternalPolicyPage() {
           <Button fullWidth type="button" onClick={() => setSaveOpen(true)}>
             Zapisz
           </Button>
-        </motion.section>
+        </Card>
       </AnimatedPage>
 
       <Modal
@@ -197,36 +190,36 @@ export function AddExternalPolicyPage() {
             if (timerRef.current) window.clearTimeout(timerRef.current);
           }
         }}
-        title=""
+        title="Skan OCR"
         footer={
           scanPhase === "done" ? (
-            <Button fullWidth onClick={applyOcrData}>
+            <Button fullWidth type="button" onClick={applyOcrData}>
               OK
             </Button>
           ) : undefined
         }
       >
         {scanPhase === "scan" ? (
-          <div className="flex flex-col items-center gap-4 py-2 text-center">
-            <Loader2 className="h-10 w-10 animate-spin text-brand-orangeDeep" aria-hidden />
-            <p className="font-semibold text-navy">Skanujemy dokument…</p>
+          <div className="flex flex-col items-center gap-3 py-2 text-center">
+            <Loader2 className="h-9 w-9 animate-spin text-brand-orange" aria-hidden />
+            <p className="text-sm font-semibold text-navy">Skanujemy dokument…</p>
           </div>
         ) : (
-          <p className="font-semibold text-navy text-center py-1">Dane zostały uzupełnione automatycznie</p>
+          <p className="text-center text-sm font-semibold text-navy">Dane zostały uzupełnione.</p>
         )}
       </Modal>
 
       <Modal
         open={saveOpen}
-        title=""
+        title="Zapisano"
         onClose={() => setSaveOpen(false)}
         footer={
-          <Button fullWidth onClick={() => setSaveOpen(false)}>
+          <Button fullWidth type="button" onClick={() => setSaveOpen(false)}>
             OK
           </Button>
         }
       >
-        <p className="font-semibold text-navy text-center">Polisa została dodana do Twojego portfela.</p>
+        <p className="text-center text-sm text-navy">Polisa została dodana do portfela.</p>
       </Modal>
     </AppShell>
   );

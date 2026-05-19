@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
 import { Loader2 } from "lucide-react";
 import { AppShell } from "../components/AppShell";
 import { AnimatedPage } from "../components/AnimatedPage";
@@ -7,6 +6,7 @@ import { AgentCard } from "../components/AgentCard";
 import { OCRCard } from "../components/OCRCard";
 import { Input } from "../components/Input";
 import { Button } from "../components/Button";
+import { Card } from "../components/Card";
 import { Modal } from "../components/Modal";
 import { SuccessModal } from "../components/SuccessModal";
 import { agent } from "../data/mocks";
@@ -35,80 +35,52 @@ export function SendDocumentPage() {
 
   return (
     <AppShell showBack>
-      <AnimatedPage className="space-y-5">
-        <h1 className="text-xl font-bold text-navy leading-snug">Wyślij dokument do swojego Agenta</h1>
+      <AnimatedPage className="space-y-4">
+        <h1 className="text-lg font-bold text-brand-orange">Wyślij dokument</h1>
 
-        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.25 }}>
-          <AgentCard agent={agent} roleBadge="Twój Agent" />
-        </motion.div>
+        <AgentCard agent={agent} roleBadge="Twój Agent" />
 
-        <p className="text-sm text-muted leading-snug">
-          Zrób zdjęcie lub dodaj plik i wyślij dokument do swojego Agenta.
-        </p>
-
-        <OCRCard
-          label="SZYBKIE WYSYŁANIE Z OCR"
-          tooltip="OCR pomaga uzupełnić dane ze zdjęcia dokumentu."
-          headline="Dodaj dokument w kilka sekund"
-          description="Dodaj dokument szybko i wygodnie."
-          primaryLabel="Zrób zdjęcie dokumentu"
-          secondaryLabel="Dodaj z galerii"
-          onPrimary={() => runBusy("Skanujemy dokument…", 1400)}
-          onSecondary={() => runBusy("Dodajemy plik z galerii…", 1000)}
-        />
-
-        <motion.section
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.28, delay: 0.05 }}
-          className="space-y-3"
-        >
+        <Card padding="md" className="space-y-3">
           <Input label="Typ dokumentu" name="docType" defaultValue="Umowa sprzedaży auta" />
-          <Input label="Krótki opis" name="desc" placeholder="np. sprzedaż pojazdu po zbyciu" />
+          <Input label="Krótki opis" name="desc" placeholder="np. sprzedaż pojazdu" />
           <button
             type="button"
-            className="w-full rounded-2xl border border-dashed border-brand-orange/30 bg-lavender/15 px-4 py-5 text-sm font-semibold text-navy"
+            className="w-full rounded-2xl border border-dashed border-line bg-[#fafafa] px-4 py-5 text-sm font-semibold text-navy"
           >
             Dodaj plik (opcjonalnie)
           </button>
-          <div className="rounded-2xl bg-success-soft border border-success/25 px-4 py-3 text-sm font-medium text-navy">
-            Dane mogą zostać uzupełnione automatycznie przez OCR
-          </div>
           <Button fullWidth type="button" onClick={() => setSentOpen(true)}>
             Wyślij do Agenta
           </Button>
-        </motion.section>
+        </Card>
+
+        <OCRCard
+          compact
+          label="OCR"
+          tooltip="Zrób zdjęcie dokumentu — uzupełnimy pola formularza."
+          primaryLabel="Zrób zdjęcie"
+          secondaryLabel="Dodaj z galerii"
+          onPrimary={() => runBusy("Skanujemy dokument…", 1400)}
+          onSecondary={() => runBusy("Dodajemy plik…", 1000)}
+        />
       </AnimatedPage>
 
       <Modal open={busyOpen} title="" onClose={() => setBusyOpen(false)}>
-        <AnimatePresence mode="wait">
-          {busyOpen ? (
-            <motion.div
-              key="busy"
-              initial={{ opacity: 0, scale: 0.96 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.96 }}
-              transition={{ duration: 0.2 }}
-              className="flex flex-col items-center gap-4 py-3 text-center"
-            >
-              <Loader2 className="h-11 w-11 animate-spin text-brand-orangeDeep" aria-hidden />
-              <p className="font-semibold leading-snug text-navy">{busyText}</p>
-              <p className="text-xs text-muted">To symulacja OCR w prototypie.</p>
-            </motion.div>
-          ) : null}
-        </AnimatePresence>
+        <div className="flex flex-col items-center gap-3 py-2 text-center">
+          <Loader2 className="h-9 w-9 animate-spin text-brand-orange" aria-hidden />
+          <p className="text-sm font-semibold text-navy">{busyText}</p>
+        </div>
       </Modal>
 
       <SuccessModal
         open={sentOpen}
-        title=""
+        title="Wysłano"
         onClose={() => setSentOpen(false)}
         onPrimary={() => setSentOpen(false)}
         primaryLabel="OK"
+        withConfetti={false}
       >
-        <p className="font-semibold text-navy leading-relaxed">
-          Dokument został wysłany do Twojego Agenta.
-        </p>
+        <p className="text-sm font-semibold text-navy">Dokument został wysłany do Twojego Agenta.</p>
       </SuccessModal>
     </AppShell>
   );

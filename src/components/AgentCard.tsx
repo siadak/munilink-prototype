@@ -1,5 +1,4 @@
 import { Check, Mail, Phone } from "lucide-react";
-import { Badge } from "./Badge";
 
 type Agent = {
   name: string;
@@ -22,49 +21,29 @@ export function AgentCard({
   selected,
   onSelect,
   showRadio,
-  roleBadge,
 }: {
   agent: Agent;
   selected?: boolean;
   onSelect?: () => void;
   showRadio?: boolean;
-  /** np. „Twój Agent” — obok avatara / na karcie */
   roleBadge?: string;
 }) {
   const body = (
-    <div className="flex items-start gap-4">
-      <div className="relative shrink-0">
-        <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-lavender/80 to-card text-navy font-bold ring-2 ring-line">
-          {initials(agent.name)}
-        </div>
-        {!showRadio ? (
-          <span className="absolute -bottom-1 -right-1 flex h-6 w-6 items-center justify-center rounded-full bg-success text-white ring-2 ring-white">
-            <Check className="h-3.5 w-3.5" strokeWidth={3} />
-          </span>
-        ) : null}
-      </div>
-      <div className="min-w-0 flex-1 space-y-1">
-        <div className="flex flex-wrap items-center justify-between gap-x-2 gap-y-1">
-          <p className="font-semibold text-navy leading-snug">{agent.name}</p>
-          {roleBadge ? (
-            <Badge tone="default" className="!text-[10px] !py-0.5 shrink-0">
-              {roleBadge}
-            </Badge>
-          ) : null}
-        </div>
-        <a href={`tel:${agent.phone}`} className="flex items-center gap-2 text-sm text-muted hover:text-navy">
+    <div className="flex items-start gap-3">
+      <div className="relative min-w-0 flex-1 space-y-1">
+        <p className="text-base font-bold text-navy leading-snug">{agent.name}</p>
+        <a href={`tel:${agent.phone}`} className="flex items-center gap-2 text-sm text-muted">
           <Phone className="h-4 w-4 shrink-0 text-brand-orange" />
           {agent.phone}
         </a>
-        <a
-          href={`mailto:${agent.email}`}
-          className="flex items-center gap-2 text-sm text-muted hover:text-navy break-all"
-        >
+        <a href={`mailto:${agent.email}`} className="flex items-center gap-2 text-sm text-muted break-all">
           <Mail className="h-4 w-4 shrink-0 text-brand-orange" />
           {agent.email}
         </a>
       </div>
-      {showRadio ? (
+      {!showRadio ? (
+        <AgentAvatar name={agent.name} />
+      ) : (
         <input
           type="radio"
           readOnly
@@ -72,7 +51,7 @@ export function AgentCard({
           className="mt-2 h-5 w-5 accent-brand-orange pointer-events-none"
           aria-label={`Wybierz ${agent.name}`}
         />
-      ) : null}
+      )}
     </div>
   );
 
@@ -88,8 +67,8 @@ export function AgentCard({
             onSelect?.();
           }
         }}
-        className={`w-full text-left rounded-[1.75rem] border bg-card p-4 shadow-card transition cursor-pointer ${
-          selected ? "border-brand-orange ring-2 ring-brand-orange/25" : "border-line hover:border-navy/20"
+        className={`w-full cursor-pointer rounded-2xl border bg-white p-4 text-left shadow-[0_2px_12px_rgba(23,26,74,0.08)] ${
+          selected ? "border-brand-orange ring-1 ring-brand-orange/30" : "border-line"
         }`}
       >
         {body}
@@ -98,6 +77,21 @@ export function AgentCard({
   }
 
   return (
-    <div className="rounded-[1.75rem] border border-line/90 bg-card p-5 shadow-card">{body}</div>
+    <div className="relative rounded-2xl border border-line/70 bg-white p-4 shadow-[0_2px_12px_rgba(23,26,74,0.08)]">
+      {body}
+      <span className="absolute bottom-3 right-3 flex h-7 w-7 items-center justify-center rounded-full bg-brand-orange text-white">
+        <Check className="h-4 w-4" strokeWidth={3} />
+      </span>
+    </div>
+  );
+}
+
+function AgentAvatar({ name }: { name: string }) {
+  return (
+    <div className="relative shrink-0">
+      <div className="flex h-16 w-16 items-center justify-center overflow-hidden rounded-full bg-[#e8e9ef] text-sm font-bold text-navy ring-2 ring-white">
+        {initials(name)}
+      </div>
+    </div>
   );
 }

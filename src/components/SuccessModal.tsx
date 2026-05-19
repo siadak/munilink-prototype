@@ -14,6 +14,7 @@ export function SuccessModal({
   onPrimary,
   onClose,
   footer,
+  withConfetti = true,
 }: {
   open: boolean;
   title?: string;
@@ -23,11 +24,13 @@ export function SuccessModal({
   onClose: () => void;
   /** Gdy podane, zastępuje domyślny pojedynczy przycisk (np. kilka CTA). */
   footer?: ReactNode;
+  /** Domyślnie włączone; wyłącz dla prostych flow (np. zakup benefitu). */
+  withConfetti?: boolean;
 }) {
   const hasConfettiFiredRef = useRef(false);
 
   useEffect(() => {
-    if (!open) {
+    if (!open || !withConfetti) {
       hasConfettiFiredRef.current = false;
       return;
     }
@@ -51,7 +54,7 @@ export function SuccessModal({
     }
 
     hasConfettiFiredRef.current = true;
-  }, [open]);
+  }, [open, withConfetti]);
 
   return (
     <Modal

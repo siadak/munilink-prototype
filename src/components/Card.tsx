@@ -1,35 +1,16 @@
 import type { ReactNode } from "react";
-import { motion } from "framer-motion";
 
 type CardProps = {
   children: ReactNode;
   className?: string;
-  padding?: "md" | "lg";
-  interactive?: boolean;
+  padding?: "md" | "lg" | "none";
 };
 
-export function Card({
-  children,
-  className = "",
-  padding = "md",
-  interactive,
-}: CardProps) {
-  const p = padding === "lg" ? "p-6" : "p-5";
-  const Comp = interactive ? motion.div : "div";
-
-  const props = interactive
-    ? {
-        whileHover: { y: -2 },
-        whileTap: { scale: 0.98 },
-      }
-    : {};
-
+export function Card({ children, className = "", padding = "md" }: CardProps) {
+  const p = padding === "lg" ? "p-5" : padding === "none" ? "" : "p-4";
   return (
-    <Comp
-      className={`rounded-[1.75rem] bg-card shadow-card border border-line/80 ${p} ${className}`}
-      {...props}
-    >
+    <div className={`rounded-2xl border border-line/60 bg-white shadow-[0_2px_8px_rgba(23,26,74,0.05)] ${p} ${className}`}>
       {children}
-    </Comp>
+    </div>
   );
 }

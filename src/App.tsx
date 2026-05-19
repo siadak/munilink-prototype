@@ -1,4 +1,5 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { MoreSheetProvider } from "./context/MoreSheetContext";
 import { LoginPage } from "./pages/LoginPage";
 import { RegisterPage } from "./pages/RegisterPage";
 import { MenuPage } from "./pages/MenuPage";
@@ -9,6 +10,7 @@ import { PolicyDetailsPage } from "./pages/PolicyDetailsPage";
 import { BuyPage } from "./pages/BuyPage";
 import { CashbackPage } from "./pages/CashbackPage";
 import { BenefitsPage } from "./pages/BenefitsPage";
+import { BenefitDetailPage } from "./pages/BenefitDetailPage";
 import { BenefitCheckoutPage } from "./pages/BenefitCheckoutPage";
 import { AddExternalPolicyPage } from "./pages/AddExternalPolicyPage";
 import { AgentPage } from "./pages/AgentPage";
@@ -17,10 +19,12 @@ import { ChangeAgentPage } from "./pages/ChangeAgentPage";
 import { LifeSurveyPage } from "./pages/LifeSurveyPage";
 import { AiAssistantPage } from "./pages/AiAssistantPage";
 import { HelpPage } from "./pages/HelpPage";
+import { MorePage } from "./pages/MorePage";
 
 export default function App() {
   return (
     <BrowserRouter>
+      <MoreSheetProvider>
       <Routes>
         <Route path="/" element={<Navigate to="/login" replace />} />
         <Route path="/login" element={<LoginPage />} />
@@ -33,6 +37,7 @@ export default function App() {
         <Route path="/buy" element={<BuyPage />} />
         <Route path="/cashback" element={<CashbackPage />} />
         <Route path="/benefits" element={<BenefitsPage />} />
+        <Route path="/benefit/:id" element={<BenefitDetailPage />} />
         <Route path="/benefit-checkout/:id" element={<BenefitCheckoutPage />} />
         <Route path="/add-external-policy" element={<AddExternalPolicyPage />} />
         <Route path="/agent" element={<AgentPage />} />
@@ -41,8 +46,10 @@ export default function App() {
         <Route path="/life-survey" element={<LifeSurveyPage />} />
         <Route path="/ai-assistant" element={<AiAssistantPage />} />
         <Route path="/help" element={<HelpPage />} />
+        <Route path="/more" element={<MorePage />} />
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
+      </MoreSheetProvider>
     </BrowserRouter>
   );
 }

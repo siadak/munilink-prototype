@@ -1,20 +1,10 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
 import { AppShell } from "../components/AppShell";
 import { AnimatedPage } from "../components/AnimatedPage";
 import { AgentCard } from "../components/AgentCard";
 import { Button } from "../components/Button";
 import { Modal } from "../components/Modal";
 import { changeAgentCandidates } from "../data/mocks";
-
-const listVariants = {
-  hidden: { opacity: 0 },
-  show: { opacity: 1, transition: { staggerChildren: 0.07 } },
-};
-const rowVariants = {
-  hidden: { opacity: 0, y: 12 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.26, ease: "easeOut" } },
-};
 
 export function ChangeAgentPage() {
   const [selected, setSelected] = useState("anna");
@@ -23,11 +13,11 @@ export function ChangeAgentPage() {
   return (
     <AppShell showBack>
       <AnimatedPage className="space-y-4">
-        <h1 className="text-2xl font-bold text-navy">Zmień Agenta</h1>
+        <h1 className="text-lg font-bold text-brand-orange">Zmień Agenta</h1>
 
-        <motion.div variants={listVariants} initial="hidden" animate="show" className="space-y-3">
+        <ul className="space-y-3">
           {changeAgentCandidates.map((a) => (
-            <motion.div key={a.id} variants={rowVariants}>
+            <li key={a.id}>
               <AgentCard
                 agent={{ name: a.name, phone: a.phone, email: a.email }}
                 showRadio
@@ -35,28 +25,26 @@ export function ChangeAgentPage() {
                 onSelect={() => setSelected(a.id)}
                 roleBadge={a.isCurrent ? "Obecny" : undefined}
               />
-            </motion.div>
+            </li>
           ))}
-        </motion.div>
-      </AnimatedPage>
+        </ul>
 
-      <div className="fixed bottom-[calc(120px+env(safe-area-inset-bottom))] left-1/2 z-[45] w-full max-w-[430px] -translate-x-1/2 px-4">
-        <Button fullWidth onClick={() => setOpen(true)}>
-          Zapisz wybór
+        <Button fullWidth type="button" onClick={() => setOpen(true)}>
+          Zapisz
         </Button>
-      </div>
+      </AnimatedPage>
 
       <Modal
         open={open}
-        title=""
+        title="Zapisano"
         onClose={() => setOpen(false)}
         footer={
-          <Button fullWidth onClick={() => setOpen(false)}>
+          <Button fullWidth type="button" onClick={() => setOpen(false)}>
             OK
           </Button>
         }
       >
-        <p className="text-center font-semibold text-navy">Agent został zmieniony.</p>
+        <p className="text-sm text-muted">Wybrany Agent został zapisany w aplikacji.</p>
       </Modal>
     </AppShell>
   );

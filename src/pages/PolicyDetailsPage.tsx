@@ -1,7 +1,6 @@
 import { useMemo } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { motion } from "framer-motion";
-import { FileText, Sparkles } from "lucide-react";
+import { FileText } from "lucide-react";
 import { AppShell } from "../components/AppShell";
 import { AnimatedPage } from "../components/AnimatedPage";
 import { Badge } from "../components/Badge";
@@ -10,7 +9,6 @@ import { Card } from "../components/Card";
 import { policies, agent } from "../data/mocks";
 
 function parsePLDate(value: string) {
-  // Format: dd.mm.yyyy
   const [dd, mm, yyyy] = value.split(".");
   return new Date(Number(yyyy), Number(mm) - 1, Number(dd));
 }
@@ -51,16 +49,12 @@ export function PolicyDetailsPage() {
   if (!policy) {
     return (
       <AppShell showBack>
-        <AnimatedPage>
-          <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="space-y-3">
-            <h1 className="text-2xl font-bold text-navy">Nie znaleźliśmy polisy</h1>
-            <p className="text-sm text-muted leading-relaxed">
-              Przejdź do listy polis i wybierz inną pozycję.
-            </p>
-            <Button fullWidth onClick={() => navigate("/policies")}>
-              Wróć do polis
-            </Button>
-          </motion.div>
+        <AnimatedPage className="space-y-4">
+          <h1 className="text-lg font-bold text-brand-orange">Nie znaleźliśmy polisy</h1>
+          <p className="text-sm text-muted leading-relaxed">Przejdź do listy polis i wybierz inną pozycję.</p>
+          <Button fullWidth type="button" onClick={() => navigate("/policies")}>
+            Wróć do polis
+          </Button>
         </AnimatedPage>
       </AppShell>
     );
@@ -70,190 +64,102 @@ export function PolicyDetailsPage() {
 
   return (
     <AppShell showBack>
-      <AnimatedPage className="space-y-5">
-        <motion.div
-          initial={{ opacity: 0, y: 14 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.28 }}
-          className="space-y-4"
-        >
-          <Card padding="lg">
-            <div className="flex items-start justify-between gap-4">
-              <div className="min-w-0">
-                <p className="text-xs font-semibold uppercase tracking-wide text-muted">{headline}</p>
-                <h2 className="text-xl font-bold text-navy leading-snug mt-1">{policy.insurer}</h2>
-                <p className="text-sm font-semibold text-navy/90">
-                  nr {policy.number}
-                </p>
-                <p className="mt-2 text-sm text-navy/80">
-                  {policy.vehicle ? `${policy.vehicle}` : policy.subject}
-                </p>
-                {policy.registration ? (
-                  <p className="text-sm text-navy/80">nr rej. {policy.registration}</p>
-                ) : null}
-                <p className="text-xs text-muted mt-2">
-                  Okres: {policy.startDate} - {policy.endDate}
-                </p>
-              </div>
+      <AnimatedPage className="space-y-4">
+        <h1 className="text-lg font-bold text-brand-orange">Szczegóły polisy</h1>
 
-              <div className="shrink-0">
-                <Badge tone={statusTone}>{policy.status}</Badge>
-              </div>
-            </div>
-
-            <div className="mt-4 space-y-3">
-              <div className="flex items-center justify-between gap-3">
-                <p className="text-sm font-semibold text-navy">Pasek czasu ochrony</p>
-                <p className="text-sm font-semibold text-brand-orangeDeep">{daysLeft} dni do końca</p>
-              </div>
-              <div className="h-2.5 rounded-full bg-lavender/40 border border-lavender/60 overflow-hidden">
-                <motion.div
-                  initial={{ width: 0 }}
-                  animate={{ width: `${Math.round(progress * 100)}%` }}
-                  transition={{ duration: 0.6, ease: "easeOut" }}
-                  className="h-full rounded-full bg-gradient-to-r from-brand-orange to-brand-orangeDeep"
-                />
-              </div>
-
-              <div className="flex gap-3">
-                <Button
-                  className="flex-1"
-                  onClick={() => navigate("/buy")}
-                >
-                  Przedłuż polisę
-                </Button>
-                <Button
-                  variant="secondary"
-                  className="flex-1"
-                  onClick={() => navigate("/help")}
-                >
-                  Zgłoś szkodę
-                </Button>
-              </div>
-            </div>
-          </Card>
-
-          <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.25 }}>
-            <Card padding="lg">
-              <h3 className="text-lg font-bold text-navy">Dokumenty</h3>
-              <div className="mt-3 space-y-2">
-                {["Polisa PDF", "OWU", "Potwierdzenie płatności"].map((t) => (
-                  <div
-                    key={t}
-                    className="flex items-center justify-between gap-3 rounded-2xl border border-line/70 bg-white/60 px-4 py-3"
-                  >
-                    <div className="flex items-center gap-3 min-w-0">
-                      <span className="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-lavender/60 border border-line/80">
-                        <FileText className="h-5 w-5 text-brand-orangeDeep" />
-                      </span>
-                      <p className="text-sm font-semibold text-navy truncate">{t}</p>
-                    </div>
-                    <span className="text-muted text-xs font-semibold">Podgląd</span>
-                  </div>
-                ))}
-              </div>
-            </Card>
-          </motion.div>
-
-          <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.25, delay: 0.04 }}>
-            <Card padding="lg">
-              <h3 className="text-lg font-bold text-navy">Szybkie akcje</h3>
-              <div className="mt-3 grid grid-cols-2 gap-3">
-                <Button
-                  variant="secondary"
-                  onClick={() => navigate("/ai-assistant")}
-                  className="justify-center"
-                >
-                  Zapytaj AI o tę polisę
-                </Button>
-
-                <Button
-                  variant="secondary"
-                  onClick={() => navigate("/send-document")}
-                  className="justify-center"
-                >
-                  Wyślij dokument do Agenta
-                </Button>
-
-                <a
-                  href={`tel:${agent.phone.replaceAll("-", "")}`}
-                  className="inline-flex col-span-1"
-                >
-                  <Button variant="ghost" className="w-full justify-center" type="button">
-                    Zadzwoń do Agenta
-                  </Button>
-                </a>
-
-                <Button
-                  variant="ghost"
-                  onClick={() => navigate("/help")}
-                  className="justify-center"
-                >
-                  Zgłoś szkodę
-                </Button>
-              </div>
-            </Card>
-          </motion.div>
-
-          <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.25, delay: 0.08 }}>
-            <Card padding="lg">
-              <div className="flex items-start justify-between gap-4">
-                <div className="flex items-center gap-3 min-w-0">
-                  <div className="h-12 w-12 rounded-2xl bg-lavender/60 border border-line/80 flex items-center justify-center">
-                    <span className="text-sm font-bold text-brand-orangeDeep">
-                      {agent.name
-                        .split(" ")
-                        .filter(Boolean)
-                        .slice(0, 3)
-                        .map((p) => p[0])
-                        .join("")}
-                    </span>
-                  </div>
-                  <div className="min-w-0">
-                    <p className="text-sm font-bold text-navy leading-snug">Twój Agent</p>
-                    <p className="text-sm font-semibold text-navy/90 truncate">{agent.name}</p>
-                  </div>
-                </div>
-                <Badge tone="default">Twój Agent</Badge>
-              </div>
-
-              <div className="mt-3 space-y-2">
-                <p className="text-sm text-muted">
-                  <span className="font-semibold text-navy/90">Tel.</span> {agent.phone}
-                </p>
-                <p className="text-sm text-muted">
-                  <span className="font-semibold text-navy/90">Email.</span> {agent.email}
-                </p>
-              </div>
-
-              <div className="mt-4 rounded-[1.5rem] border border-line/70 bg-lavender/20 px-4 py-3">
-                <div className="flex items-center gap-2">
-                  <Sparkles className="h-4 w-4 text-brand-orangeDeep" />
-                  <p className="text-sm font-semibold text-navy">Co możesz załatwić z Agentem?</p>
-                </div>
-                <div className="mt-2 flex gap-2 text-sm">
-                  <Button variant="secondary" className="flex-1" onClick={() => navigate("/send-document")}>
-                    Wyślij dokument
-                  </Button>
-                  <Button variant="ghost" className="flex-1" onClick={() => navigate("/change-agent")}>
-                    Zmień Agenta
-                  </Button>
-                </div>
-              </div>
-            </Card>
-          </motion.div>
-
-          <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.25, delay: 0.12 }}>
-            <div className="rounded-[1.75rem] border border-line/80 bg-lavender/20 px-5 py-4">
-              <p className="text-sm font-semibold text-navy">Info</p>
-              <p className="mt-1 text-sm text-muted leading-relaxed">
-                Dane polisy pochodzą z systemów Unilink. W razie rozbieżności sprawdź dokument polisy lub skontaktuj się z Agentem.
+        <Card padding="md" className="space-y-4">
+          <div className="flex items-start justify-between gap-4">
+            <div className="min-w-0">
+              <p className="text-xs font-semibold uppercase tracking-wide text-muted">{headline}</p>
+              <h2 className="mt-1 text-lg font-bold text-navy">{policy.insurer}</h2>
+              <p className="text-sm font-semibold text-navy/90">nr {policy.number}</p>
+              <p className="mt-2 text-sm text-navy/80">{policy.vehicle ? policy.vehicle : policy.subject}</p>
+              {policy.registration ? <p className="text-sm text-navy/80">nr rej. {policy.registration}</p> : null}
+              <p className="mt-2 text-xs text-muted">
+                Okres: {policy.startDate} - {policy.endDate}
               </p>
             </div>
-          </motion.div>
-        </motion.div>
+            <Badge tone={statusTone}>{policy.status}</Badge>
+          </div>
+
+          <div className="space-y-2">
+            <div className="flex items-center justify-between gap-3 text-sm">
+              <span className="font-semibold text-navy">Czas ochrony</span>
+              <span className="font-semibold text-brand-orange">{daysLeft} dni do końca</span>
+            </div>
+            <div className="h-2 overflow-hidden rounded-full bg-[#e8e9ef]">
+              <div className="h-full rounded-full bg-brand-orange" style={{ width: `${Math.round(progress * 100)}%` }} />
+            </div>
+          </div>
+
+          <div className="flex gap-2">
+            <Button className="flex-1" type="button" onClick={() => navigate("/buy")}>
+              Przedłuż polisę
+            </Button>
+            <Button variant="secondary" className="flex-1" type="button" onClick={() => navigate("/help")}>
+              Zgłoś szkodę
+            </Button>
+          </div>
+        </Card>
+
+        <Card padding="md" className="space-y-3">
+          <h3 className="text-sm font-bold text-navy">Dokumenty</h3>
+          <ul className="space-y-2">
+            {["Polisa PDF", "OWU", "Potwierdzenie płatności"].map((t) => (
+              <li
+                key={t}
+                className="flex items-center justify-between gap-3 rounded-xl border border-line/60 bg-[#fafafa] px-3 py-2.5"
+              >
+                <span className="flex min-w-0 items-center gap-2">
+                  <FileText className="h-4 w-4 shrink-0 text-brand-orange" />
+                  <span className="truncate text-sm font-semibold text-navy">{t}</span>
+                </span>
+                <span className="text-xs font-semibold text-muted">Podgląd</span>
+              </li>
+            ))}
+          </ul>
+        </Card>
+
+        <Card padding="md" className="space-y-3">
+          <h3 className="text-sm font-bold text-navy">Szybkie akcje</h3>
+          <div className="grid grid-cols-2 gap-2">
+            <Button variant="secondary" type="button" onClick={() => navigate("/ai-assistant")}>
+              Zapytaj AI
+            </Button>
+            <Button variant="secondary" type="button" onClick={() => navigate("/send-document")}>
+              Wyślij dokument
+            </Button>
+            <a href={`tel:${agent.phone.replaceAll("-", "")}`} className="col-span-1">
+              <Button variant="ghost" className="w-full" type="button">
+                Zadzwoń
+              </Button>
+            </a>
+            <Button variant="ghost" type="button" onClick={() => navigate("/help")}>
+              Zgłoś szkodę
+            </Button>
+          </div>
+        </Card>
+
+        <Card padding="md" className="space-y-3">
+          <p className="text-sm font-bold text-navy">Twój Agent</p>
+          <p className="text-sm font-semibold text-navy">{agent.name}</p>
+          <p className="text-sm text-muted">Tel. {agent.phone}</p>
+          <p className="text-sm text-muted">Email {agent.email}</p>
+          <div className="flex gap-2 pt-1">
+            <Button variant="secondary" className="flex-1" type="button" onClick={() => navigate("/send-document")}>
+              Wyślij dokument
+            </Button>
+            <Button variant="ghost" className="flex-1" type="button" onClick={() => navigate("/change-agent")}>
+              Zmień Agenta
+            </Button>
+          </div>
+        </Card>
+
+        <p className="text-xs leading-relaxed text-muted">
+          Dane polisy pochodzą z systemów Unilink. W razie rozbieżności sprawdź dokument polisy lub skontaktuj się z
+          Agentem.
+        </p>
       </AnimatedPage>
     </AppShell>
   );
 }
-
