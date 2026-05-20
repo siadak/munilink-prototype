@@ -15,6 +15,10 @@ body {
   background-color: #e8e9ef;
 }
 
+body.premium-concept-root {
+  background-color: #050612;
+}
+
 #root {
   min-height: 0;
 }
