@@ -16,6 +16,10 @@ import { BenefitDetailPage } from "./pages/BenefitDetailPage";
 import { BenefitCheckoutPage } from "./pages/BenefitCheckoutPage";
 import { AddExternalPolicyPage } from "./pages/AddExternalPolicyPage";
 import { AgentPage } from "./pages/AgentPage";
+import { AgentSinglePage } from "./pages/agent/AgentSinglePage";
+import { AgentMultiplePage } from "./pages/agent/AgentMultiplePage";
+import { AgentMultipleSelectPage } from "./pages/agent/AgentMultipleSelectPage";
+import { AgentCodePage } from "./pages/agent/AgentCodePage";
 import { SendDocumentPage } from "./pages/SendDocumentPage";
 import { ChangeAgentPage } from "./pages/ChangeAgentPage";
 import { LifeSurveyPage } from "./pages/LifeSurveyPage";
@@ -51,6 +55,10 @@ export default function App() {
           <Route path="/benefit-checkout/:id" element={<BenefitCheckoutPage />} />
           <Route path="/add-external-policy" element={<AddExternalPolicyPage />} />
           <Route path="/agent" element={<VariantPage realistic={AgentPage} premium={PremiumAgentPage} />} />
+          <Route path="/agent/single" element={<AgentSinglePage />} />
+          <Route path="/agent/multiple" element={<AgentMultiplePage />} />
+          <Route path="/agent/multiple/select" element={<AgentMultipleSelectPage />} />
+          <Route path="/agent/code" element={<AgentCodePage />} />
           <Route path="/send-document" element={<SendDocumentPage />} />
           <Route path="/change-agent" element={<ChangeAgentPage />} />
           <Route

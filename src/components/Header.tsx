@@ -15,6 +15,7 @@ import {
   type DemoMode,
   type NavigationVariant,
 } from "../context/DemoContext";
+import { AGENT_WORKSHOP_LINKS } from "../data/agentScenarios";
 
 export function Header({ showBack }: { showBack?: boolean }) {
   const navigate = useNavigate();
@@ -120,6 +121,28 @@ export function Header({ showBack }: { showBack?: boolean }) {
                       </li>
                     );
                   })}
+                </ul>
+              </section>
+
+              <section className="border-t border-line/70 pt-2">
+                <p className="px-2 pb-1 text-[11px] font-semibold uppercase tracking-wide text-muted">
+                  Scenariusze — zakładka Agent
+                </p>
+                <ul className="space-y-1">
+                  {AGENT_WORKSHOP_LINKS.map((link) => (
+                    <li key={link.path}>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          navigate(link.path);
+                          setProfileOpen(false);
+                        }}
+                        className="flex w-full items-center rounded-lg px-2.5 py-2.5 text-left text-sm font-semibold text-navy hover:bg-[#f4f4f6]"
+                      >
+                        {link.label}
+                      </button>
+                    </li>
+                  ))}
                 </ul>
               </section>
 

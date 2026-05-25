@@ -3,11 +3,14 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App";
 import { DemoProvider } from "./context/DemoContext";
+import { WorkshopAgentProvider } from "./context/WorkshopAgentContext";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <DemoProvider>
-      <App />
+      <WorkshopAgentProvider>
+        <App />
+      </WorkshopAgentProvider>
     </DemoProvider>
   </StrictMode>,
 );
